@@ -2033,5 +2033,14 @@
       return str ? str.charAt(0).toUpperCase() + str.slice(1) : "";
     }
   </script>
+  <script>
+if ("serviceWorker" in navigator) {
+  window.addEventListener("load", () => {
+    navigator.serviceWorker.register("/sw.js")
+      .then(() => console.log("Weather Pro PWA ready"))
+      .catch(error => console.error("PWA error:", error));
+  });
+}
+  </script>
 </body>
 </html
