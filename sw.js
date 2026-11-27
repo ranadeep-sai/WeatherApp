@@ -1,6 +1,13 @@
-const CACHE_NAME = "weather-pro-v1";
+
+const CACHE_NAME = "weather-pro-v2";
+const APP_URL = "/";
 
 self.addEventListener("install", event => {
+  event.waitUntil(
+    caches.open(CACHE_NAME).then(cache =>
+      cache.add(APP_URL)
+    )
+  );
   self.skipWaiting();
 });
 
@@ -15,5 +22,19 @@ self.addEventListener("activate", event => {
         )
       )
     ])
+  );
+});
+
+self.addEventListener("fetch", event => {
+  if (event.request.method !== "GET") return;
+
+  const url = new URL(event.request.url);
+
+  if (url.origin !== self.location.origin) return;
+
+  event.respondWith(
+    fetch(event.request).catch(() =>
+      caches.match(event.request)
+    )
   );
 });
